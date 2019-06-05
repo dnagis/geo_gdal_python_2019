@@ -10,7 +10,10 @@ import sqlite3
 import json
 from datetime import datetime
 
-conn = sqlite3.connect("/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db")
+
+#la_db = '/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db'
+la_db = '/root/lozere.db'
+conn = sqlite3.connect(la_db)
 cur = conn.cursor()
 cur.execute("SELECT fixtime, lat, long, alt, acc FROM loc")
 rows = cur.fetchall()
