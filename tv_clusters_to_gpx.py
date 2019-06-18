@@ -17,14 +17,18 @@ from osgeo import gdal
 #la_db = '/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db'
 la_db = '/root/lozere.db'
 le_gpx = '/root/out.gpx'
+YEAR=2019
+MONTH=06
+DAY=01
+
+dt_start = int((datetime(YEAR,MONTH,DAY,0,0) - datetime(1970,1,1,0,0)).total_seconds())
+dt_end = int((datetime(YEAR,MONTH,DAY,23,59) - datetime(1970,1,1,0,0)).total_seconds())
+
+
 conn = sqlite3.connect(la_db)
 cur = conn.cursor()
-cur.execute("SELECT fixtime, lat, long, alt, acc FROM loc WHERE ID > 30")
+cur.execute("SELECT fixtime, lat, long, alt, acc FROM loc where FIXTIME > :dt_start AND FIXTIME < :dt_end", {"dt_start": dt_start, "dt_end": dt_end})
 rows = cur.fetchall()
-
-
-
-
 
 
 
@@ -37,7 +41,6 @@ featureDict = {
   "type": "Feature",
   "properties": {"popupContent": None}
 }
-
 
 
 
