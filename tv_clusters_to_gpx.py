@@ -4,6 +4,8 @@
 Parser loc.db android recupere avec tileview pour ne pas avoir des paquets enormes de locations aux memes endroits
 segreger des cluster par fixtime: on iterate, et quand le suivant est a plus que gap_time on finit un cluster, quon
 traite dans parse_un_cluster() -> on sort par accuracy.
+
+***Attention aux fixtime en milliseconde!!!***
 '''
  
 import sqlite3
@@ -15,11 +17,11 @@ from osgeo import gdal
 
 
 #la_db = '/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db'
-la_db = '/root/lozere.db'
+la_db = '/root/loc.db'
 le_gpx = '/root/out.gpx'
 YEAR=2019
 MONTH=06
-DAY=01
+DAY=24
 
 dt_start = int((datetime(YEAR,MONTH,DAY,0,0) - datetime(1970,1,1,0,0)).total_seconds())
 dt_end = int((datetime(YEAR,MONTH,DAY,23,59) - datetime(1970,1,1,0,0)).total_seconds())
@@ -55,7 +57,7 @@ def parse_un_cluster(un_cluster):
     
 length = len(rows)   
 
-#print "nb total de rows dans le fichier: ",length  
+print "nb total de rows dans le fichier: ",length  
 
 for i in range(length-1): #on pourrait commencer a 1 avec range(1, n)
     #print rows[i]
@@ -74,7 +76,7 @@ for loc in final_locations:
 multiline = ogr.ForceToMultiLineString(line)
 outdriver = ogr.GetDriverByName('GPX')
 dataSourceOut = outdriver.CreateDataSource(le_gpx)
-outLayer = dataSourceOut.CreateLayer("lozere", geom_type=ogr.wkbMultiLineString)
+outLayer = dataSourceOut.CreateLayer("run", geom_type=ogr.wkbMultiLineString)
 outLayerDefn = outLayer.GetLayerDefn()
 outFeature = ogr.Feature(outLayerDefn)
 outFeature.SetGeometry(multiline)
