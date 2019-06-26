@@ -21,7 +21,7 @@ la_db = '/root/loc.db'
 le_gpx = '/root/out.gpx'
 YEAR=2019
 MONTH=06
-DAY=24
+DAY=26
 
 dt_start = int((datetime(YEAR,MONTH,DAY,0,0) - datetime(1970,1,1,0,0)).total_seconds())
 dt_end = int((datetime(YEAR,MONTH,DAY,23,59) - datetime(1970,1,1,0,0)).total_seconds())
