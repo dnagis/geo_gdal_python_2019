@@ -10,7 +10,6 @@ traite dans parse_un_cluster() -> on sort par accuracy.
  
 import sqlite3
 import json
-from datetime import datetime
 import os
 import time
 from osgeo import ogr
@@ -18,27 +17,22 @@ from osgeo import gdal
 
 
 #la_db = '/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db'
-la_db = '/initrd/mnt/dev_save/packages/GEO/loc-db_randos/lozere.db'
-#la_db = '/root/rando_sumene_260619.db'
+#la_db = '/initrd/mnt/dev_save/packages/GEO/loc-db_randos/lozere.db'
+la_db = '/root/loc.db'
 le_gpx = '/root/out.gpx'
 
-#Selection de la fenetre de temps
-YEAR=2019
-MONTH=06
-DAY=26
+####Selection de la fenetre de temps
 
-#dt_start = int((datetime(YEAR,MONTH,DAY,0,0) - datetime(1970,1,1,0,0)).total_seconds())
-#dt_end = int((datetime(YEAR,MONTH,DAY,23,59) - datetime(1970,1,1,0,0)).total_seconds())
-
+#https://docs.python.org/2/library/time.html
 #pour avoir epoch d'une date: date +%s -d 06.12-14:40
-dt_start = 1559301600
-dt_end = int(time.time()) #now...
+epoch_start = 1561586460
+epoch_end = int(time.time()) #now...
 
 
 
 conn = sqlite3.connect(la_db)
 cur = conn.cursor()
-cur.execute("SELECT fixtime, lat, long, alt, acc FROM loc where FIXTIME > :dt_start AND FIXTIME < :dt_end", {"dt_start": dt_start, "dt_end": dt_end})
+cur.execute("SELECT fixtime, lat, long, alt, acc FROM loc where FIXTIME > :epoch_start AND FIXTIME < :epoch_end", {"epoch_start": epoch_start, "epoch_end": epoch_end})
 rows = cur.fetchall()
 
 
@@ -47,14 +41,8 @@ gap_time = 60 #delai au dela duquel je considere quon est dans un autre groupe d
 cluster_locations = [] #collection que tu arretes dalimenter quand le next fixtime est distant de + de gap_time
 final_locations = [] #destination finale des locations: parsage de chaque buffer location
 
-featureDict = {
-  'geometry': { 'type': 'Point', 'coordinates': [None, None] },
-  "type": "Feature",
-  "properties": {"popupContent": None}
-}
 
-
-
+#A partir d un cluster de locations, en selectionner une seule (base sur accuracy je crois)
 def parse_un_cluster(un_cluster):
 	#print "on parse un cluster sa taille= ",len(un_cluster)
 	#print un_cluster
@@ -98,20 +86,19 @@ outLayer.CreateField(field_elev)
 
 
 for loc in final_locations:
-	print loc
+	print time.strftime("%Y-%m-%d %H:%M:%S    ", time.localtime(loc[0])), loc[1], loc[2], int(loc[3]), int(loc[4]) 
 	point = ogr.Geometry(ogr.wkbPoint)
 	point.AddPoint(loc[2], loc[1])
 	outFeature = ogr.Feature(outLayer.GetLayerDefn())
 	outFeature.SetField("track_fid", "1")
 	outFeature.SetField("track_seg_id", "1")
 	outFeature.SetField("ele", loc[3])
-	outFeature.SetField("time", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(loc[0]))) #sinon time.localtime
+	outFeature.SetField("time", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(loc[0]))) #en UTC (greenwhich meridian) sinon time.localtime
 	outFeature.SetGeometry(point)
-	#et on lajoute a la layer
 	outLayer.CreateFeature(outFeature)
 	
 	
-print "nb de fixes: ",len(final_locations) 
+print "nb total de fixes: ",len(final_locations) 
 
 
 
