@@ -68,11 +68,20 @@ for i in range(length-1): #on pourrait commencer a 1 avec range(1, n)
         parse_un_cluster(cluster_locations)
         cluster_locations = [] # on repart a zero
 
+#OK, à ce point on a les locations dans la collection "final_locations" au format:
+#	(1561526344, 43.93645806, 3.70691857, 237.0, 54.672000885009766) (epoch, lat, lng, ele, acc)
+
+
+
 
     
 line = ogr.Geometry(ogr.wkbLineString)
+
 for loc in final_locations:
+	print loc
 	line.AddPoint(loc[2], loc[1], loc[3])
+	
+	
 multiline = ogr.ForceToMultiLineString(line)
 outdriver = ogr.GetDriverByName('GPX')
 dataSourceOut = outdriver.CreateDataSource(le_gpx)
