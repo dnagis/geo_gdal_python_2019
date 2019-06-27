@@ -18,14 +18,22 @@ from osgeo import gdal
 
 
 #la_db = '/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db'
-la_db = '/root/loc.db'
+la_db = '/initrd/mnt/dev_save/packages/GEO/loc-db_randos/lozere.db'
+#la_db = '/root/rando_sumene_260619.db'
 le_gpx = '/root/out.gpx'
+
+#Selection de la fenetre de temps
 YEAR=2019
 MONTH=06
 DAY=26
 
-dt_start = int((datetime(YEAR,MONTH,DAY,0,0) - datetime(1970,1,1,0,0)).total_seconds())
-dt_end = int((datetime(YEAR,MONTH,DAY,23,59) - datetime(1970,1,1,0,0)).total_seconds())
+#dt_start = int((datetime(YEAR,MONTH,DAY,0,0) - datetime(1970,1,1,0,0)).total_seconds())
+#dt_end = int((datetime(YEAR,MONTH,DAY,23,59) - datetime(1970,1,1,0,0)).total_seconds())
+
+#pour avoir epoch d'une date: date +%s -d 06.12-14:40
+dt_start = 1559301600
+dt_end = int(time.time()) #now...
+
 
 
 conn = sqlite3.connect(la_db)
