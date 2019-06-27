@@ -97,7 +97,7 @@ for loc in final_locations:
 	outFeature.SetField("track_fid", "1")
 	outFeature.SetField("track_seg_id", "1")
 	outFeature.SetField("ele", loc[3])
-	outFeature.SetField("time", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.localtime(loc[0])))
+	outFeature.SetField("time", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(loc[0]))) #sinon time.localtime
 	outFeature.SetGeometry(point)
 	#et on lajoute a la layer
 	outLayer.CreateFeature(outFeature)
