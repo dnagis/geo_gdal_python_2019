@@ -12,6 +12,7 @@ import sqlite3
 import json
 from datetime import datetime
 import os
+import time
 from osgeo import ogr
 from osgeo import gdal
 
@@ -55,9 +56,8 @@ def parse_un_cluster(un_cluster):
 	final_locations.append(best_loc_du_cluster)
 	
     
-length = len(rows)   
-
-print "nb total de rows dans le fichier: ",length  
+length = len(rows)
+#print "nb total de rows dans le fichier: ",length  
 
 for i in range(length-1): #on pourrait commencer a 1 avec range(1, n)
     #print rows[i]
@@ -68,28 +68,46 @@ for i in range(length-1): #on pourrait commencer a 1 avec range(1, n)
         parse_un_cluster(cluster_locations)
         cluster_locations = [] # on repart a zero
 
-#OK, à ce point on a les locations dans la collection "final_locations" au format:
+#OK, a ce point on a les locations dans la collection "final_locations" au format:
 #	(1561526344, 43.93645806, 3.70691857, 237.0, 54.672000885009766) (epoch, lat, lng, ele, acc)
 
+outdriver = ogr.GetDriverByName('GPX')
+dataSourceOut = outdriver.CreateDataSource(le_gpx)
+outLayer = dataSourceOut.CreateLayer("track_points", geom_type=ogr.wkbPoint25D)
+
+#On fabrique les champs de la layer (cf custom_gpx.py)
+field_track_fid = ogr.FieldDefn("track_fid", ogr.OFTInteger)
+outLayer.CreateField(field_track_fid)
+field_track_seg_id = ogr.FieldDefn("track_seg_id", ogr.OFTInteger)
+outLayer.CreateField(field_track_seg_id)
+field_time = ogr.FieldDefn("time", ogr.OFTString)
+outLayer.CreateField(field_time)
+field_elev = ogr.FieldDefn("ele", ogr.OFTReal)
+outLayer.CreateField(field_elev)
 
 
 
-    
-line = ogr.Geometry(ogr.wkbLineString)
+
 
 for loc in final_locations:
 	print loc
-	line.AddPoint(loc[2], loc[1], loc[3])
+	point = ogr.Geometry(ogr.wkbPoint)
+	point.AddPoint(loc[2], loc[1])
+	outFeature = ogr.Feature(outLayer.GetLayerDefn())
+	outFeature.SetField("track_fid", "1")
+	outFeature.SetField("track_seg_id", "1")
+	outFeature.SetField("ele", loc[3])
+	outFeature.SetField("time", time.strftime("%Y-%m-%dT%H:%M:%SZ", time.localtime(loc[0])))
+	outFeature.SetGeometry(point)
+	#et on lajoute a la layer
+	outLayer.CreateFeature(outFeature)
 	
 	
-multiline = ogr.ForceToMultiLineString(line)
-outdriver = ogr.GetDriverByName('GPX')
-dataSourceOut = outdriver.CreateDataSource(le_gpx)
-outLayer = dataSourceOut.CreateLayer("run", geom_type=ogr.wkbMultiLineString)
-outLayerDefn = outLayer.GetLayerDefn()
-outFeature = ogr.Feature(outLayerDefn)
-outFeature.SetGeometry(multiline)
-outLayer.CreateFeature(outFeature)
+print "nb de fixes: ",len(final_locations) 
+
+
+
+
 outFeature = None
 dataSourceIn = None
 dataSourceOut = None
