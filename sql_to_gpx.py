@@ -17,15 +17,16 @@ from osgeo import ogr
 from osgeo import gdal
 
 
-jour='02' #%d Day of the month as a decimal number [01,31].
-mois='07' #%m Month as a decimal number [01,12].
+jour='30' #%d Day of the month as a decimal number [01,31].
+mois='06' #%m Month as a decimal number [01,12].
 annee='2019' #%Y Year with century as a decimal number.
+nombre_de_jours=5
 
 
 #la_db = '/initrd/mnt/dev_save/packages/GEO/playground_gdal/sample_dbs/loc_micisse.db'
 #la_db = '/initrd/mnt/dev_save/packages/GEO/loc-db_randos/lozere.db'
 la_db = '/root/queyras_mt-viso-1.db'
-le_gpx="/root/"+jour+"_"+mois+".gpx"
+le_gpx="/root/_tout_"+jour+"_"+mois+".gpx"
 
 #https://docs.python.org/2/library/time.html
 #pour avoir epoch d'une date: date +%s -d 06.12-14:40
@@ -33,7 +34,7 @@ le_gpx="/root/"+jour+"_"+mois+".gpx"
 
 struct_epoch_start = time.strptime(jour + " " + mois + " " + annee, "%d %m %Y") 
 epoch_start = calendar.timegm(struct_epoch_start)
-epoch_end = epoch_start + (24 * 3600)
+epoch_end = epoch_start + (24 * nombre_de_jours * 3600)
 
 
 
