@@ -1,0 +1,61 @@
+#!/usr/bin/sh
+
+#Syntaxe pour tileview, mais je prefere garder les numeros de col/row dans les tiles et renommer ensuite. m'evite de re-telecharger a chaque fois
+#ign-COL_ROW.jpg 
+#0_0 1_0 2_0 3_0 ...
+#0_1 1_1 2_1 3_1 ...
+#0_2 1_2 2_2 3_2 ...
+#0_3 1_3 2_3 3_3 ...
+
+#http://tools.geofabrik.de/map/#16/43.9235/3.7230&type=Geofabrik_Standard&grid=1
+
+ZOOM=16
+
+coordHG="43.115503,-0.732776" #HautGauche
+coordBD="42.545613,0.433997" #BasDte
+
+lat0=`echo $coordHG | cut -d "," -f 1`
+lng0=`echo $coordHG | cut -d "," -f 2`
+latN=`echo $coordBD | cut -d "," -f 1`
+lngN=`echo $coordBD | cut -d "," -f 2`
+
+#echo $lat0 $lng0 $latN $lngN
+
+XYHG=(`/home/geo/latlng $lat0 $lng0 16`)
+X0=${XYHG[0]}
+Y0=${XYHG[1]}
+XYBD=(`/home/geo/latlng $latN $lngN 16`)
+XN=${XYBD[0]}
+YN=${XYBD[1]}
+
+echo $X0 $Y0 $XN $YN
+
+mkdir ign
+mkdir otm
+
+fetch_otm () {
+	if [ ! -f otm/otm-$2_$1.png ] 
+	then
+		echo "curl fetch row $1 col $2 zoom $ZOOM nom du fichier otm-$2_$1.png"
+		curl https://a.tile.opentopomap.org/$ZOOM/$2/$1.png -o otm/otm-$2_$1.png
+	fi
+}
+
+fetch_ign () {
+	COL=$2
+	ROW=$1
+	if [ ! -f ign/ign-$2_$1.jpg ] 
+	then
+		echo "curl fetch row $1 col $2 zoom $ZOOM nom du fichier ign-$2_$1.jpg"
+		curl -u gratouille:soumgave "https://wxs.ign.fr/8r3orbbkaj1g7p1hk367bv5e/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
+		#sleep 2 #pas envie de me faire mal voir chez ign...
+	fi
+}
+
+
+for ((y=$Y0;y<=$YN;y++)); do
+	for ((x=$X0;x<=$XN;x++)); do
+		fetch_ign $y $x
+		fetch_otm $y $x 
+	done    
+done
