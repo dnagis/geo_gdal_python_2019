@@ -1,5 +1,7 @@
 #!/usr/bin/sh
 
+#astuce keep up in background: ../../recup_tiles & disown
+
 #Syntaxe pour tileview, mais je prefere garder les numeros de col/row dans les tiles et renommer ensuite. m'evite de re-telecharger a chaque fois
 #ign-COL_ROW.jpg 
 #0_0 1_0 2_0 3_0 ...
