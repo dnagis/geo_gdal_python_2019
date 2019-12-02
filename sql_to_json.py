@@ -20,7 +20,7 @@ locs_array = []
 
 length = len(rows) 
 
-for i in range(length-1):
+for i in range(length):
 	featureDict = {"asyncid":rows[i][0],"starttime":rows[i][1],"endtime":rows[i][2],"httpreply":rows[i][3],"nlocs":rows[i][4],"lat": rows[i][5], "long": rows[i][6]}
 	locs_array.append(featureDict)
 
