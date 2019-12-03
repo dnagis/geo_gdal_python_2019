@@ -9,28 +9,43 @@ CREATE TABLE loc (ID INTEGER PRIMARY KEY AUTOINCREMENT, FIXTIME INTEGER NOT NULL
 import sqlite3
 import json
 from datetime import datetime
+import sys
 
-#requete_sqlite = 'SELECT asyncid, starttime, endtime, httpreply, nlocs, lat, long FROM net'
-requete_sqlite = 'SELECT fixtime, lat, long, acc, alt, altacc, sent FROM loc'
 
-db_file = '/root/loc.db'
+
+requete_net = 'SELECT asyncid, starttime, endtime, httpreply, nlocs, lat, long FROM net'
+requete_loc = 'SELECT fixtime, lat, long, acc, alt, altacc, sent FROM loc'
+
+db_file=str(sys.argv[1])
+
+
 conn = sqlite3.connect(db_file)
 cur = conn.cursor()
-cur.execute(requete_sqlite)
+
+
+##Loc
+cur.execute(requete_loc)
 rows = cur.fetchall()
-
-
-array_final = []
-
+locs_array = []
 length = len(rows) 
 
 for i in range(length):
 	#featureDict = {"asyncid":rows[i][0],"starttime":rows[i][1],"endtime":rows[i][2],"httpreply":rows[i][3],"nlocs":rows[i][4],"lat": rows[i][5], "long": rows[i][6]}
 	featureDict = {"fixtime":rows[i][0],"lat":rows[i][1],"long":rows[i][2],"acc":rows[i][3],"alt":rows[i][4],"altacc": rows[i][5], "sent": rows[i][6]}
-	array_final.append(featureDict)
+	locs_array.append(featureDict)
 
 
-#utiliser du ternary?
-print "locs_array =",array_final
+outputfile = open("loctrack_data.js", "w+") 
+outputfile.write("locs_array ="+str(locs_array)+"\n")
 
 
+##network
+cur.execute(requete_net)
+rows = cur.fetchall()
+length = len(rows)
+net_array = []
+for i in range(length):
+	featureDict = {"asyncid":rows[i][0],"starttime":rows[i][1],"endtime":rows[i][2],"httpreply":rows[i][3],"nlocs":rows[i][4],"lat": rows[i][5], "long": rows[i][6]}
+	net_array.append(featureDict)
+
+outputfile.write("net_array ="+str(net_array))
