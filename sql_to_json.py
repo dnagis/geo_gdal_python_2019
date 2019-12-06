@@ -15,6 +15,7 @@ import sys
 
 requete_net = 'SELECT asyncid, starttime, endtime, httpreply, nlocs, lat, long FROM net'
 requete_loc = 'SELECT fixtime, lat, long, acc, alt, altacc, sent FROM loc'
+#requete_loc = 'SELECT fixtime, lat, long, acc, alt FROM loc'
 
 db_file=str(sys.argv[1])
 
@@ -32,6 +33,7 @@ length = len(rows)
 for i in range(length):
 	#featureDict = {"asyncid":rows[i][0],"starttime":rows[i][1],"endtime":rows[i][2],"httpreply":rows[i][3],"nlocs":rows[i][4],"lat": rows[i][5], "long": rows[i][6]}
 	featureDict = {"fixtime":rows[i][0],"lat":rows[i][1],"long":rows[i][2],"acc":rows[i][3],"alt":rows[i][4],"altacc": rows[i][5], "sent": rows[i][6]}
+	#featureDict = {"fixtime":rows[i][0],"lat":rows[i][1],"long":rows[i][2],"acc":rows[i][3],"alt":rows[i][4]}
 	locs_array.append(featureDict)
 
 
