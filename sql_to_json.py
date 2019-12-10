@@ -8,13 +8,18 @@ CREATE TABLE loc (ID INTEGER PRIMARY KEY AUTOINCREMENT, FIXTIME INTEGER NOT NULL
  
 import sqlite3
 import json
-from datetime import datetime
+import datetime
 import sys
+import time
 
 
+#calcul epoch aujourdhui a minuit
+now = datetime.datetime.now()
+midnight_dt = datetime.datetime(year=now.year, month=now.month, day=now.day)
+epoch_minuit_ajd = int(time.mktime(midnight_dt.timetuple()))
 
-requete_net = 'SELECT asyncid, starttime, endtime, httpreply, nlocs, lat, long FROM net'
-requete_loc = 'SELECT fixtime, lat, long, acc, alt, altacc, sent FROM loc'
+requete_net = 'SELECT asyncid, starttime, endtime, httpreply, nlocs, lat, long FROM net where starttime > ' + str(epoch_minuit_ajd)
+requete_loc = 'SELECT fixtime, lat, long, acc, alt, altacc, sent FROM loc where fixtime > ' + str(epoch_minuit_ajd)
 #requete_loc = 'SELECT fixtime, lat, long, acc, alt FROM loc'
 
 db_file=str(sys.argv[1])
@@ -22,6 +27,9 @@ db_file=str(sys.argv[1])
 
 conn = sqlite3.connect(db_file)
 cur = conn.cursor()
+
+
+
 
 
 ##Loc
@@ -51,3 +59,5 @@ for i in range(length):
 	net_array.append(featureDict)
 
 outputfile.write("net_array ="+str(net_array))
+
+print("data written to loctrack_data.js")
