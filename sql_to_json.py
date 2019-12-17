@@ -65,7 +65,7 @@ length = len(rows)
 net_array = []
 for i in range(length):
 	featureDict = {"asyncid":rows[i][0],"starttime":rows[i][1],"endtime":rows[i][2],"httpreply":rows[i][3],"nlocs":rows[i][4],"lat": rows[i][5], "long": rows[i][6]}
-	if rows[i][0] > midnight_epoch:
+	if rows[i][1]/1000 > midnight_epoch:
 		net_array.append(featureDict)
 
 outputfile.write("net_array ="+str(net_array))
