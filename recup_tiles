@@ -13,30 +13,30 @@
 
 ZOOM=16
 
-coordHG="43.708586,2.04895" #HautGauche
-coordBD="43.344156,3.041153" #BasDte
+coordNW="43.708586,2.04895" #NW nord ouest (HautGauche)
+coordSE="43.344156,3.041153" #SE sud est (BasDte)
 
-lat0=`echo $coordHG | cut -d "," -f 1`
-lng0=`echo $coordHG | cut -d "," -f 2`
-latN=`echo $coordBD | cut -d "," -f 1`
-lngN=`echo $coordBD | cut -d "," -f 2`
+lat0=`echo $coordNW | cut -d "," -f 1`
+lng0=`echo $coordNW | cut -d "," -f 2`
+latN=`echo $coordSE | cut -d "," -f 1`
+lngN=`echo $coordSE | cut -d "," -f 2`
 
 #echo $lat0 $lng0 $latN $lngN
 
 
-XYHG=(`/home/geo/latlng $lat0 $lng0 16`)
-#XYHG=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $lat0 $lng0 16`)
-X0=${XYHG[0]}
-Y0=${XYHG[1]}
-XYBD=(`/home/geo/latlng $latN $lngN 16`)
-#XYBD=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $latN $lngN 16`)
-XN=${XYBD[0]}
-YN=${XYBD[1]}
+XYNW=(`/home/geo/latlng $lat0 $lng0 16`)
+#XYNW=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $lat0 $lng0 16`)
+X0=${XYNW[0]}
+Y0=${XYNW[1]}
+XYSE=(`/home/geo/latlng $latN $lngN 16`)
+#XYSE=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $latN $lngN 16`)
+XN=${XYSE[0]}
+YN=${XYSE[1]}
 
 echo $X0 $Y0 $XN $YN
 
-mkdir ign
-mkdir otm
+mkdir ign 2>/dev/null
+mkdir otm 2>/dev/null
 
 fetch_otm () {
 	if [ ! -f otm/otm-$2_$1.png ] 
