@@ -13,8 +13,8 @@
 
 ZOOM=16
 
-coordHG="43.115503,-0.732776" #HautGauche
-coordBD="42.545613,0.433997" #BasDte
+coordHG="43.708586,2.04895" #HautGauche
+coordBD="43.344156,3.041153" #BasDte
 
 lat0=`echo $coordHG | cut -d "," -f 1`
 lng0=`echo $coordHG | cut -d "," -f 2`
@@ -23,10 +23,13 @@ lngN=`echo $coordBD | cut -d "," -f 2`
 
 #echo $lat0 $lng0 $latN $lngN
 
+
 XYHG=(`/home/geo/latlng $lat0 $lng0 16`)
+#XYHG=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $lat0 $lng0 16`)
 X0=${XYHG[0]}
 Y0=${XYHG[1]}
 XYBD=(`/home/geo/latlng $latN $lngN 16`)
+#XYBD=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $latN $lngN 16`)
 XN=${XYBD[0]}
 YN=${XYBD[1]}
 
