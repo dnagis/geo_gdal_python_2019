@@ -24,14 +24,14 @@ lngN=`echo $coordSE | cut -d "," -f 2`
 echo $lat0 $lng0 $latN $lngN
 
 
-XYNW=(`/initrd/mnt/dev_save/packages/GEO/geo_gdal_python_2019/latlng $lat0 $lng0 16`)
+XYNW=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $lat0 $lng0 16`)
 X0=${XYNW[0]}
 Y0=${XYNW[1]}
-XYSE=(`/initrd/mnt/dev_save/packages/GEO/geo_gdal_python_2019/latlng $latN $lngN 16`)
+XYSE=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $latN $lngN 16`)
 XN=${XYSE[0]}
 YN=${XYSE[1]}
 
-echo $X_0 $Y_0 $X_N $Y_N
+echo $X0 $Y0 $XN $YN
 
 mkdir ign 2>/dev/null
 mkdir otm 2>/dev/null
