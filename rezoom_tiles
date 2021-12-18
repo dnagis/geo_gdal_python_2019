@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#Les tiles sont déjà récupérées (recup_tiles), on en récupère seulement une sous partie
+
+
+coordNW="43.707283, 4.249649" 
+coordSE="43.632907, 4.415989" 
+
+lat0=`echo $coordNW | cut -d "," -f 1`
+lng0=`echo $coordNW | cut -d "," -f 2`
+latN=`echo $coordSE | cut -d "," -f 1`
+lngN=`echo $coordSE | cut -d "," -f 2`
+
+echo $lat0 $lng0 $latN $lngN
+
+
+XYNW=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $lat0 $lng0 16`)
+X0=${XYNW[0]}
+Y0=${XYNW[1]}
+XYSE=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $latN $lngN 16`)
+XN=${XYSE[0]}
+YN=${XYSE[1]}
+
+echo $X0 $Y0 $XN $YN
+
+
+TILESDIR=/initrd/mnt/dev_save/packages/GEO/tiles/
+PLACE=gallician
+
+SRCDIR=${TILESDIR}camargue_wide/
+OUTDIR=${TILESDIR}${PLACE}/ign/
+
+echo SRCDIR=$SRCDIR
+echo OUTDIR=$OUTDIR
+
+mkdir -p $OUTDIR
+#rm ${OUTDIR}*
+
+
+
+for (( y = $Y0; y <= $YN; y++)); do
+	for ((x=$X0;x<=$XN;x++)); do
+		FILE="${SRCDIR}ign/ign-${x}_${y}.jpg"
+		#ls -l $FILE
+		cp $FILE $OUTDIR
+	done    
+done
+
