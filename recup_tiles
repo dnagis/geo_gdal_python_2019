@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/sh
 
 #astuce keep up in background: ../../recup_tiles & disown
 
@@ -13,21 +13,23 @@
 
 ZOOM=16
 
-coordNW="43.72223,4.54903" #NW nord ouest
-coordSE="43.62676,4.74215" #SE sud est
+coordNW="44.835491,5.267135" #NW nord ouest (HautGauche)
+coordSE="44.691051,5.491313" #SE sud est (BasDte)
 
 lat0=`echo $coordNW | cut -d "," -f 1`
 lng0=`echo $coordNW | cut -d "," -f 2`
 latN=`echo $coordSE | cut -d "," -f 1`
 lngN=`echo $coordSE | cut -d "," -f 2`
 
-echo $lat0 $lng0 $latN $lngN
+#echo $lat0 $lng0 $latN $lngN
 
 
-XYNW=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $lat0 $lng0 16`)
+XYNW=(`/home/geo/latlng $lat0 $lng0 16`)
+#XYNW=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $lat0 $lng0 16`)
 X0=${XYNW[0]}
 Y0=${XYNW[1]}
-XYSE=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $latN $lngN 16`)
+XYSE=(`/home/geo/latlng $latN $lngN 16`)
+#XYSE=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $latN $lngN 16`)
 XN=${XYSE[0]}
 YN=${XYSE[1]}
 
@@ -35,7 +37,6 @@ echo $X0 $Y0 $XN $YN
 
 mkdir ign 2>/dev/null
 mkdir otm 2>/dev/null
-
 
 fetch_otm () {
 	if [ ! -f otm/otm-$2_$1.png ] 
@@ -51,16 +52,15 @@ fetch_ign () {
 	if [ ! -f ign/ign-$2_$1.jpg ] 
 	then
 		echo "curl fetch row $1 col $2 zoom $ZOOM nom du fichier ign-$2_$1.jpg"
-		curl -u gratouille:soumgave "https://wxs.ign.fr/8r3orbbkaj1g7p1hk367bv5e/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
+		curl "https://wxs.ign.fr/3axvvs1gs50veqzdxcbknvcn/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
 		#sleep 2 #pas envie de me faire mal voir chez ign...
 	fi
 }
 
 
-
-for (( y = $Y0; y <= $YN; y++)); do
+for ((y=$Y0;y<=$YN;y++)); do
 	for ((x=$X0;x<=$XN;x++)); do
 		fetch_ign $y $x
-		fetch_otm $y $x 
+		#fetch_otm $y $x 
 	done    
 done
