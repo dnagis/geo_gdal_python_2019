@@ -52,7 +52,7 @@ fetch_ign () {
 	if [ ! -f ign/ign-$2_$1.jpg ] 
 	then
 		echo "curl fetch row $1 col $2 zoom $ZOOM nom du fichier ign-$2_$1.jpg"
-		curl "https://wxs.ign.fr/3axvvs1gs50veqzdxcbknvcn/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
+		curl "https://wxs.ign.fr/<ta clé ici>/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
 		#sleep 2 #pas envie de me faire mal voir chez ign...
 	fi
 }
