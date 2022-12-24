@@ -3,8 +3,8 @@
 #Les tiles sont déjà récupérées (recup_tiles), on en récupère seulement une sous partie
 
 
-coordNW="43.707283, 4.249649" 
-coordSE="43.632907, 4.415989" 
+coordNW="43.715535, 4.373932" 
+coordSE="43.634584, 4.514523" 
 
 lat0=`echo $coordNW | cut -d "," -f 1`
 lng0=`echo $coordNW | cut -d "," -f 2`
@@ -14,10 +14,10 @@ lngN=`echo $coordSE | cut -d "," -f 2`
 echo $lat0 $lng0 $latN $lngN
 
 
-XYNW=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $lat0 $lng0 16`)
+XYNW=(`/initrd/mnt/dev_save/packages/GEO/geo_gdal_python_2019/latlng $lat0 $lng0 16`)
 X0=${XYNW[0]}
 Y0=${XYNW[1]}
-XYSE=(`/initrd/mnt/dev_save/packages/geo_gdal_python_2019/latlng $latN $lngN 16`)
+XYSE=(`/initrd/mnt/dev_save/packages/GEO/geo_gdal_python_2019/latlng $latN $lngN 16`)
 XN=${XYSE[0]}
 YN=${XYSE[1]}
 
@@ -25,9 +25,9 @@ echo $X0 $Y0 $XN $YN
 
 
 TILESDIR=/initrd/mnt/dev_save/packages/GEO/tiles/
-PLACE=gallician
+PLACE=stgilles
 
-SRCDIR=${TILESDIR}camargue_wide/
+SRCDIR=${TILESDIR}camargue/
 OUTDIR=${TILESDIR}${PLACE}/ign/
 
 echo SRCDIR=$SRCDIR
