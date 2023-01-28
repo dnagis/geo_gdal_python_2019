@@ -1,6 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 #https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+
+#./latlng 43.946831 4.011539 16 doit donner 33498 23843
 
 import math
 import sys
