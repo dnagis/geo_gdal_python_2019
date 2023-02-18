@@ -11,24 +11,26 @@
 
 #http://tools.geofabrik.de/map/#16/43.9235/3.7230&type=Geofabrik_Standard&grid=1
 
+
+#Nouveau format pour NW et SE:
+#LAT_NW LNG_NW LAT_SE LNG_SE (delimiteur = espace)
+NW_SE="43.95285	3.857403 43.834589 4.108715" 
+
+lat0=`echo $NW_SE | cut -d ' ' -f 1`
+lng0=`echo $NW_SE | cut -d ' ' -f 2`
+latN=`echo $NW_SE | cut -d ' ' -f 3`
+lngN=`echo $NW_SE | cut -d ' ' -f 4`
+
+echo "lat0=" $lat0 "lng0=" $lng0 "latN=" $latN "lngN=" $lngN
+
+
 ZOOM=16
 
-coordNW="44.835491,5.267135" #NW nord ouest (HautGauche)
-coordSE="44.691051,5.491313" #SE sud est (BasDte)
-
-lat0=`echo $coordNW | cut -d "," -f 1`
-lng0=`echo $coordNW | cut -d "," -f 2`
-latN=`echo $coordSE | cut -d "," -f 1`
-lngN=`echo $coordSE | cut -d "," -f 2`
-
-#echo $lat0 $lng0 $latN $lngN
-
-
-XYNW=(`/home/geo/latlng $lat0 $lng0 16`)
+XYNW=(`/home/geo/latlng $lat0 $lng0 $ZOOM`)
 #XYNW=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $lat0 $lng0 16`)
 X0=${XYNW[0]}
 Y0=${XYNW[1]}
-XYSE=(`/home/geo/latlng $latN $lngN 16`)
+XYSE=(`/home/geo/latlng $latN $lngN $ZOOM`)
 #XYSE=(`/initrd/mnt/dev_save/packages/GEO/playground_gdal/python/latlng $latN $lngN 16`)
 XN=${XYSE[0]}
 YN=${XYSE[1]}
