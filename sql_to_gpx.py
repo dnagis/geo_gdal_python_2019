@@ -16,8 +16,8 @@ from osgeo import ogr
 from osgeo import gdal	
 
 
-jour='29' #%d Day of the month as a decimal number [01,31].	
-mois='07' #%m Month as a decimal number [01,12].	
+jour='14' #%d Day of the month as a decimal number [01,31].	
+mois='11' #%m Month as a decimal number [01,12].	
 annee='2019' #%Y Year with century as a decimal number.	
 nombre_de_jours=1	
 

@@ -13,19 +13,15 @@
 
 source /home/geo/geo_functions.sh
 
-#A l'ancienne: tu donnes deux coordonnées
-#Nouveau format pour NW et SE:
-#LAT_NW LNG_NW LAT_SE LNG_SE (delimiteur = espace)
-#NW_SE="43.95285	3.857403 43.834589 4.108715" 
-#lat0=`echo $NW_SE | cut -d ' ' -f 1`
-#lng0=`echo $NW_SE | cut -d ' ' -f 2`
-#latN=`echo $NW_SE | cut -d ' ' -f 3`
-#lngN=`echo $NW_SE | cut -d ' ' -f 4`
+#A l'ancienne: tu donnes deux coordonnées NW et SE
+#Nouveau format pour les 4 coords: LAT_NW LNG_NW LAT_SE LNG_SE (delimiteur = espace)
+#NW_SE="43.95285 3.857403 43.834589 4.108715" 
+#read lat0 lng0 latN lngN < <(echo $NW_SE)
 
 #Nouveau: tu donnes une coordonnée centrale et une distance en km qui sera ajoutée dans les 4 directions
 read lat0 lng0 latN lngN < <(coord_to_bbox 43.782312 4.089646 10)
 
-echo "lat0=" $lat0 "lng0=" $lng0 "latN=" $latN "lngN=" $lngN
+echo "lat0="$lat0 "lng0="$lng0 "latN="$latN "lngN="$lngN
 
 
 ZOOM=16
