@@ -20,6 +20,7 @@ source /home/geo/geo_functions.sh
 
 #Nouveau: tu donnes une coordonnée centrale et une distance en km qui sera ajoutée dans les 4 directions
 read lat0 lng0 latN lngN < <(coord_to_bbox 43.782312 4.089646 10)
+#15km --> 90Mo --> adb push 3 min
 
 echo "lat0="$lat0 "lng0="$lng0 "latN="$latN "lngN="$lngN
 
