@@ -2,6 +2,8 @@
 
 #astuce keep up in background: ../../recup_tiles & disown
 
+CLE_IGN=XXXXXXX #cf mtox@geo
+
 #Syntaxe pour tileview, mais je prefere garder les numeros de col/row dans les tiles et renommer ensuite. m'evite de re-telecharger a chaque fois
 #ign-COL_ROW.jpg 
 #0_0 1_0 2_0 3_0 ...
@@ -18,7 +20,7 @@ source /home/geo/geo_functions.sh
 #NW_SE="43.95285 3.857403 43.834589 4.108715" 
 #read lat0 lng0 latN lngN < <(echo $NW_SE)
 
-#Nouveau: tu donnes une coordonnée centrale et une distance en km qui sera ajoutée dans les 4 directions
+#Nouveau: coordonnée centrale + distance en km qui sera ajoutée dans les 4 directions format: coord_to_bbox LAT LNG KMS
 read lat0 lng0 latN lngN < <(coord_to_bbox 43.782312 4.089646 10)
 #15km --> 90Mo --> adb push 3 min
 
@@ -56,7 +58,7 @@ fetch_ign () {
 	then
 		echo "curl fetch row $1 col $2 zoom $ZOOM nom du fichier ign-$2_$1.jpg"
 		#-k mars 23 pour curl: (60) SSL certificate problem: unable to get local issuer certificate
-		curl -k "https://wxs.ign.fr/<ta clé ici>/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
+		curl -k "https://wxs.ign.fr/$CLE_IGN/geoportail/wmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=PM&tilematrix=$ZOOM&tilecol=$COL&tilerow=$ROW&layer=GEOGRAPHICALGRIDSYSTEMS.MAPS&format=image/jpeg&style=normal" -o ign/ign-$2_$1.jpg
 		#sleep 2 #pas envie de me faire mal voir chez ign...
 	fi
 }
